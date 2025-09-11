@@ -11,6 +11,15 @@ export default class Device extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
 
+  @column()
+  declare name: string
+
+  @column()
+  declare ipAddress: string
+  
+  @column()
+  declare location: string
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

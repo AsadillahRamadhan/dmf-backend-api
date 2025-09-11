@@ -11,6 +11,12 @@ export default class Temperature extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
 
+  @column()
+  declare deviceId: string
+
+  @column()
+  declare temperature: number
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
