@@ -35,6 +35,10 @@ export default class AuthService {
         return this.authRepository.logout(auth);
     }
 
+    public async currentUser(auth: Authenticator<Authenticators>){
+        return this.authRepository.currentUser(auth);
+    }
+
     public async changeAvatar(id: string, avatar: MultipartFile){
         const oldPath = await this.authRepository.getOldAvatar(id);
         if(oldPath){

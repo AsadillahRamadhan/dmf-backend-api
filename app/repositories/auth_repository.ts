@@ -24,6 +24,10 @@ export default class AuthRepository {
         return true;
     }
 
+    public async currentUser(auth: Authenticator<Authenticators>){
+        return auth.user;
+    }
+
     public async getOldAvatar(id: string){
         const data = await User.findOrFail(id);
         return data.avatar;

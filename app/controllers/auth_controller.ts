@@ -27,6 +27,7 @@ export default class AuthController {
             if(!token){
                 return response.status(404).json({message: "Those credentials doesn't match our records!", success: false});
             }
+            response.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'lax' }); // 7 days
             return response.status(200).json({message: "User found!", token, success: true});
         } catch (e){
             if (e instanceof errors.E_VALIDATION_ERROR) {
@@ -39,9 +40,19 @@ export default class AuthController {
     async logout({auth, response}: HttpContext){
         try {
             await this.authService.logout(auth);
+            response.clearCookie('token');
             return response.ok({message: "Logged Out!", success: true});
         } catch (e){
             return response.status(500).json({message: e.message, success: false});
+        }
+    }
+
+    async currentUser({auth, response}: HttpContext){
+        try {
+            const user = await this.authService.currentUser(auth);
+            return response.status(200).json({message: "User found!", user, success: true});
+        } catch (e){
+            return response.status(404).json({message: e.message, success: false});
         }
     }
 
