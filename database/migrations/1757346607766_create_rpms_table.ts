@@ -9,6 +9,8 @@ export default class extends BaseSchema {
       table.uuid('device_id')
       table.uuid('user_id')
       table.integer('rpm')
+      table.boolean('is_active').defaultTo(false)
+      table.boolean('is_clockwise').defaultTo(true)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })
