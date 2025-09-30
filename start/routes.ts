@@ -25,15 +25,6 @@ router.group(() => {
   router.post('register', [AuthController, 'register']).as('register')
   router.post('login', [AuthController, 'login']).as('login')
 
-  router.resource('devices', DevicesController).apiOnly();
-  router.resource('rpms', RpmsController).apiOnly();
-  router.resource('temperatures', TemperatureController).apiOnly();
-  router.get('/temperatures/latest/:device_id', [TemperatureController, 'latest']).as('temperatures.latest');
-  router.get('/rpms/latest/:device_id', [RpmsController, 'latest']).as('rpms.latest');
-
-  router.get('/history/temperature/:device_id', [TemperatureController, 'history']).as('temperatures.history');
-  router.get('/history/rpm/:device_id', [RpmsController, 'history']).as('rpms.history');
-
 router.group(() => {
     router.group(() => {
       router.get('/', [UsersController, 'index']).as('user.index')
@@ -49,6 +40,17 @@ router.group(() => {
       router.get('/current-user', [AuthController, 'currentUser']).as('current-user');
     router.put('/change-avatar', [AuthController, 'changeAvatar']).as('change-avatar');
     router.put('/delete-avatar', [AuthController, 'deleteAvatar']).as('deleteAvatar');
+
+    router.resource('devices', DevicesController).apiOnly();
+    router.resource('rpms', RpmsController).apiOnly();
+    router.resource('temperatures', TemperatureController).apiOnly();
+    router.get('/temperatures/latest/:device_id', [TemperatureController, 'latest']).as('temperatures.latest');
+    router.get('/rpms/latest/:device_id', [RpmsController, 'latest']).as('rpms.latest');
+
+    router.get('/history/temperature/:device_id', [TemperatureController, 'history']).as('temperatures.history');
+    router.get('/history/rpm/:device_id', [RpmsController, 'history']).as('rpms.history');
+
+    router.post('/use-device', [DevicesController, 'useDevice']).as('devices.use');
   }).middleware(middleware.auth());
 
 }).prefix('api')

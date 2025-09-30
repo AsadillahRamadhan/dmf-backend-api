@@ -10,7 +10,7 @@ export default class RpmsService {
     }
 
     async store(deviceId: string, userId: string, rpm: number, isActive: boolean, isClockwise: boolean){
-        return this.rpmsRepository.store(deviceId, userId, rpm, isActive, isClockwise);
+        await this.rpmsRepository.store(deviceId, userId, rpm, isActive, isClockwise);
     }
 
     async show(id: string){

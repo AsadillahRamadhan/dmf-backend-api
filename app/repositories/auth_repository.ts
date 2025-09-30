@@ -1,3 +1,4 @@
+import Device from "#models/device";
 import User from "#models/user";
 import { Authenticator } from "@adonisjs/auth";
 import { Authenticators } from "@adonisjs/auth/types";
@@ -21,6 +22,12 @@ export default class AuthRepository {
     public async logout(auth: Authenticator<Authenticators>){
         const user = auth.user!;
         await User.accessTokens.delete(user, user.currentAccessToken.identifier);
+        const device = await Device.findBy('is_used_by', user.id);
+        if(device){
+            device.isUsed = false;
+            device.isUsedBy = "";
+            device.save();
+        }
         return true;
     }
 

@@ -17,6 +17,14 @@ export default class DeviceService {
         return this.deviceRepository.show(id);
     }
 
+    async useDevice(auth: any, id: string){
+        return this.deviceRepository.useDevice(auth, id);
+    }
+
+    async getByName(name: string){
+        return this.deviceRepository.getByName(name);
+    }
+
     async update(id: string, name: string, ip_address: string, location: string){
         return this.deviceRepository.update(id, name, ip_address, location);
     }

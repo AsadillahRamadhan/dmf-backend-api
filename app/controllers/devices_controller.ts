@@ -20,6 +20,16 @@ export default class DevicesController {
         }
     }
 
+    async useDevice({auth, request, response}: HttpContext){
+        try {
+            const id = request.body().id;
+            const data = await this.deviceService.useDevice(auth, id);
+            return response.status(200).json({message: "Success using the device!", data, success: true});
+        } catch (e){
+            return response.status(404).json({message: e.message, success: false});
+        }
+    }
+
 
     public async store({ request, response }: HttpContext) {
         try {
@@ -34,10 +44,20 @@ export default class DevicesController {
         }
     }
 
-     async show({request, response}: HttpContext){
+    async show({request, response}: HttpContext){
         try {
             const id = request.param('id');
             const data = await this.deviceService.show(id);
+            return response.status(200).json({message: "Data found!", data, success: true});
+        } catch (e){
+            return response.status(404).json({message: e.message, success: false});
+        }
+    }
+
+    async getByName({request, response}: HttpContext){
+        try {
+            const name = request.qs()['name'];
+            const data = await this.deviceService.getByName(name);
             return response.status(200).json({message: "Data found!", data, success: true});
         } catch (e){
             return response.status(404).json({message: e.message, success: false});

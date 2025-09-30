@@ -1,0 +1,79 @@
+import mqtt from "mqtt";
+import io from './socket.js';
+import Device from "#models/device";
+import bot from './telegram.js';
+const client = mqtt.connect(`${process.env.MQTT_BROKER_URL}`, {
+  clientId: process.env.MQTT_CLIENT_ID,
+  protocolId: 'MQIsdp',
+  protocolVersion: 3,
+  connectTimeout: 1000,
+  username: process.env.MQTT_USERNAME,
+  password: process.env.MQTT_PASSWORD
+});
+
+let previousValue: any = {};
+
+client.on('connect', async () => {
+  console.log('MQTT BROKER CONNECTED!');
+
+  client.subscribeAsync('esp32/status')
+  const devices = await Device.all();
+  devices.forEach((device) => {
+    client.subscribeAsync(`${device.name}`)
+  })
+  client.on('message', async (topic, message) => {
+    let parsedMessage = JSON.parse(message.toString());
+
+    // Security
+    let security = parsedMessage.sensorDatas.find((item: { flag: string }) => item.flag === "security");
+    if(security && security.switcher == 0){
+      if(!previousValue[topic]){
+        bot.sendMessage(`${process.env.TELEGRAM_CHAT_ID}`, `Device (${topic}) is opened at ${dateNow()}`);
+        previousValue[topic] = parsedMessage;
+        return
+      }
+      let previousSecurity = previousValue[topic].sensorDatas.find((item: { flag: string }) => item.flag === "security");
+      if(previousSecurity && previousSecurity.switcher == 1){
+        bot.sendMessage(`${process.env.TELEGRAM_CHAT_ID}`, `Device (${topic}) is opened at ${dateNow()}`);
+      }
+    }
+
+    
+    // if(topic.includes('esp32/temperature')){
+    //   const activeDevice = await DeviceRepository.getActiveDevices();
+    //   activeDevice.forEach((device) => {
+    //     if(device.name == topic.split('/')[2]) io.emit(`temperature/${device.id}`, { text: message.toString() });
+    //   })
+    // }
+    previousValue[topic] = parsedMessage;
+  })
+});
+
+client.on('error', (err) => {
+  console.log(`Error connecting to MQTT Broker. Message: ${err}`);
+});
+
+const dateNow = () => {
+    const now = new Date();
+
+const dateOptions = {
+    day: '2-digit',      
+    month: 'long',    
+    year: 'numeric'   
+};
+
+const timeOptions = {
+    hour: '2-digit',  
+    minute: '2-digit', 
+    second: '2-digit',
+    hour12: false,      
+    timeZone: 'Asia/Jakarta'
+};
+
+const formattedDate = now.toLocaleDateString('id-ID', dateOptions);
+const formattedTime = now.toLocaleTimeString('id-ID', timeOptions);
+
+return `${formattedDate} ${formattedTime} WIB`;
+}
+
+export default client;

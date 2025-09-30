@@ -1,12 +1,14 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { rpmValidator } from '../validators/rpm.js';
 import RpmsService from '#services/rpm_service';
-import { inject } from '@adonisjs/core';
 import { errors } from '@vinejs/vine';
+import { inject } from '@adonisjs/core';
+import client from '#start/mqtt';
 
 @inject()
 export default class RpmsController {
     constructor(protected rpmsService: RpmsService) {}
+    
 
     async index({request, response}: HttpContext){
         try {
@@ -25,6 +27,7 @@ export default class RpmsController {
         try {
             const req = await request.validateUsing(rpmValidator);
             const data = await this.rpmsService.store(req.device_id, req.user_id, req.rpm, req.is_active, req.is_clockwise);
+            client.publish(`esp32/perintah`, JSON.stringify({device_id: req.device_id, user_id: req.user_id, rpm: req.rpm, is_active: req.is_active, is_clockwise: req.is_clockwise}));
             return response.status(201).json({message: "Data created!", data, success: true});
         } catch (e){
             if (e instanceof errors.E_VALIDATION_ERROR) {
