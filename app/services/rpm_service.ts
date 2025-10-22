@@ -1,5 +1,7 @@
 import { inject } from "@adonisjs/core";
 import RpmsRepository from "../repositories/rpm_repository.js";
+import client from "#start/mqtt";
+import DeviceRepository from "../repositories/device_repository.js";
 
 @inject()
 export default class RpmsService {
@@ -10,6 +12,18 @@ export default class RpmsService {
     }
 
     async store(deviceId: string, userId: string, rpm: number, isActive: boolean, isClockwise: boolean){
+        const payload = {
+            sensorDatas: [
+                {
+                    sensorId: 1234,
+                    switcher: isActive ? 1 : 0,
+                    flag: 'motor_status'
+                }
+            ],
+            down: "down"
+        }
+        const device = await DeviceRepository.getName(deviceId);
+        client.publish(`${device}/command`, JSON.stringify(payload));
         await this.rpmsRepository.store(deviceId, userId, rpm, isActive, isClockwise);
     }
 

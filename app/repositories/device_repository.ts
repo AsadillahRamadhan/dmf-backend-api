@@ -16,6 +16,11 @@ export default class DeviceRepository {
         return data;
     }
 
+    static async getName(id: string){
+        const data = await Device.findOrFail(id);
+        return data.name;
+    }
+
     static async getActiveDevices(){
         const data = await Device.query().where('is_used', true);
         return data;
