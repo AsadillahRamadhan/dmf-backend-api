@@ -92,18 +92,18 @@ client.on('error', (err) => {
 const dateNow = () => {
     const now = new Date();
 
-const dateOptions = {
-    day: '2-digit',      
-    month: 'long',    
-    year: 'numeric'   
+const dateOptions: Intl.DateTimeFormatOptions = {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
 };
 
-const timeOptions = {
-    hour: '2-digit',  
-    minute: '2-digit', 
-    second: '2-digit',
-    hour12: false,      
-    timeZone: 'Asia/Jakarta'
+const timeOptions: Intl.DateTimeFormatOptions = {
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: false,
+  timeZone: 'Asia/Jakarta',
 };
 
 const formattedDate = now.toLocaleDateString('id-ID', dateOptions);

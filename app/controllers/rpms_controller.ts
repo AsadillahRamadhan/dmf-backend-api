@@ -3,7 +3,7 @@ import { rpmValidator } from '../validators/rpm.js';
 import RpmsService from '#services/rpm_service';
 import { errors } from '@vinejs/vine';
 import { inject } from '@adonisjs/core';
-import client from '#start/mqtt';
+// import client from '#start/mqtt';
 
 @inject()
 export default class RpmsController {

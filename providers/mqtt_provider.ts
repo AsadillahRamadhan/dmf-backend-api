@@ -1,6 +1,6 @@
 import type { ApplicationService } from '@adonisjs/core/types'
-import mqtt, { type MqttClient } from 'mqtt'
-import env from '#start/env'
+// import mqtt, { type MqttClient } from 'mqtt'
+// import env from '#start/env'
 
 // Deklarasikan tipe untuk IoC Container
 // declare module '@adonisjs/core/types' {
