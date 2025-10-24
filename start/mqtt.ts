@@ -11,7 +11,8 @@ const client = mqtt.connect(`${process.env.MQTT_BROKER_URL}`, {
   protocolVersion: 3,
   connectTimeout: 1000,
   username: process.env.MQTT_USERNAME,
-  password: process.env.MQTT_PASSWORD
+  password: process.env.MQTT_PASSWORD,
+  caPaths: process.env.MQTT_CA_CERT_PATH
 });
 
 let previousValue: any = {};
@@ -34,7 +35,7 @@ client.on('connect', async () => {
         io.emit(`${device.id}/rpm`, { text: parsedMessage.sensorDatas.find((item: any) => item.flag === 'rpm').value });
         io.emit(`${device.id}/temperature`, { text: parsedMessage.sensorDatas.find((item: any) => item.flag === 'temperature').value });
         io.emit(`${device.id}/motor_status`, { text: parsedMessage.sensorDatas.find((item: any) => item.flag === 'motor_status').switcher });
-        console.log(parsedMessage.sensorDatas.find((item: any) => item.flag === 'motor_status').switcher);
+        io.emit(`${device.id}/security_status`, { text: parsedMessage.sensorDatas.find((item: any) => item.flag === 'security_status').switcher });
         
         const latestStatus = await Rpm.query().where('deviceId', device.id).orderBy('createdAt', 'desc').first();
         const user = await User.findByOrFail('name', "Manual");
@@ -53,23 +54,23 @@ client.on('connect', async () => {
     
 
     // Security
-    // let security = parsedMessage.sensorDatas.find((item: { flag: string }) => item.flag === "security");
-    // if(security && security.switcher == 0){
-    //   if(!previousValue[topic]){
-    //     try {
+    let security = parsedMessage.sensorDatas.find((item: { flag: string }) => item.flag === "security_status");
+    if(security && security.switcher == 0){
+      if(!previousValue[topic]){
+        try {
 
-    //     } catch (e) {
-    //       return 
-    //     }
-    //     bot.sendMessage(`${process.env.TELEGRAM_CHAT_ID}`, `Device (${topic}) is opened at ${dateNow()}`);
-    //     previousValue[topic] = parsedMessage;
-    //     return
-    //   }
-    //   let previousSecurity = previousValue[topic].sensorDatas.find((item: { flag: string }) => item.flag === "security");
-    //   if(previousSecurity && previousSecurity.switcher == 1){
-    //     bot.sendMessage(`${process.env.TELEGRAM_CHAT_ID}`, `Device (${topic}) is opened at ${dateNow()}`);
-    //   }
-    // }
+        } catch (e) {
+          return 
+        }
+        bot.sendMessage(`${process.env.TELEGRAM_CHAT_ID}`, `Device (${topic}) is opened at ${dateNow()}`);
+        previousValue[topic] = parsedMessage;
+        return
+      }
+      let previousSecurity = previousValue[topic].sensorDatas.find((item: { flag: string }) => item.flag === "security_status");
+      if(previousSecurity && previousSecurity.switcher == "1"){
+        bot.sendMessage(`${process.env.TELEGRAM_CHAT_ID}`, `Device (${topic}) is opened at ${dateNow()}`);
+      }
+    }
 
 
 
