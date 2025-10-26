@@ -28,13 +28,13 @@ export default class DeviceRepository {
 
     async useDevice(auth: any, id: string){
         const data = await Device.findOrFail(id);
-        await data.load('user');
-        if(data.isUsed){
-            throw new Error(`Device is already used by ${data.user.name}`)
-        }
-        data.isUsed = true;
+        // await data.load('user');
+        // if(data.isUsed && data.isUsedBy !== auth.user.id){
+        //     throw new Error(`Device is already used by ${data.user.name}`)
+        // }
+        // data.isUsed = true;
         data.isUsedBy = auth.user.id;
-        await data.save();
+        // await data.save();
         return data;
     }
     
