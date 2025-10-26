@@ -55,23 +55,23 @@ client.on('connect', async () => {
     
 
     // Security
-    // let security = parsedMessage.sensorDatas.find((item: { flag: string }) => item.flag === "security_status");
-    // if(security && security.switcher == 0){
-    //   if(!previousValue[topic]){
-    //     try {
+    let security = parsedMessage.sensorDatas.find((item: { flag: string }) => item.flag === "security_status");
+    if(security && security.switcher == 0){
+      if(!previousValue[topic]){
+        try {
 
-    //     } catch (e) {
-    //       return 
-    //     }
-    //     bot.sendMessage(`${process.env.TELEGRAM_CHAT_ID}`, `Device (${topic}) is opened at ${dateNow()}`);
-    //     previousValue[topic] = parsedMessage;
-    //     return
-    //   }
-    //   let previousSecurity = previousValue[topic].sensorDatas.find((item: { flag: string }) => item.flag === "security_status");
-    //   if(previousSecurity && previousSecurity.switcher == "1"){
-    //     bot.sendMessage(`${process.env.TELEGRAM_CHAT_ID}`, `Device (${topic}) is opened at ${dateNow()}`);
-    //   }
-    // }
+        } catch (e) {
+          return 
+        }
+        bot.sendMessage(`${process.env.TELEGRAM_CHAT_ID}`, `Device (${topic}) is opened at ${dateNow()}`);
+        previousValue[topic] = parsedMessage;
+        return
+      }
+      let previousSecurity = previousValue[topic].sensorDatas.find((item: { flag: string }) => item.flag === "security_status");
+      if(previousSecurity && previousSecurity.switcher == "1"){
+        bot.sendMessage(`${process.env.TELEGRAM_CHAT_ID}`, `Device (${topic}) is opened at ${dateNow()}`);
+      }
+    }
 
 
 
