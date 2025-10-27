@@ -26,7 +26,7 @@ client.on('connect', async () => {
   })
   client.on('message', async (topic, message) => {
     let parsedMessage = JSON.parse(message.toString());
-    // console.log(parsedMessage.sensorDatas);
+    console.log(parsedMessage.sensorDatas);
     // console.log(parsedMessage.dev_info.eth_dev_list[0].Dev_name)
 
     const activeDevice = await DeviceRepository.getActiveDevices();
@@ -88,7 +88,7 @@ client.on('connect', async () => {
 });
 
 client.on('error', (err) => {
-  console.log(`Error connecting to MQTT Broker. Message: ${err}`);
+  console.error(`Error connecting to MQTT Broker. Message: ${err}`);
 });
 
 // const dateNow = () => {
