@@ -2,7 +2,7 @@ import mqtt from "mqtt";
 import io from './socket.js';
 import Device from "#models/device";
 import DeviceRepository from "../app/repositories/device_repository.js";
-// import bot from './telegram.js';
+import bot from './telegram.js';
 import Rpm from "#models/rpm";
 import User from "#models/user";
 const client = mqtt.connect(`${process.env.MQTT_BROKER_URL}`, {
@@ -91,27 +91,27 @@ client.on('error', (err) => {
   console.error(`Error connecting to MQTT Broker. Message: ${err}`);
 });
 
-// const dateNow = () => {
-//     const now = new Date();
+const dateNow = () => {
+    const now = new Date();
 
-// const dateOptions: Intl.DateTimeFormatOptions = {
-//   day: '2-digit',
-//   month: 'long',
-//   year: 'numeric',
-// };
+const dateOptions: Intl.DateTimeFormatOptions = {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+};
 
-// const timeOptions: Intl.DateTimeFormatOptions = {
-//   hour: '2-digit',
-//   minute: '2-digit',
-//   second: '2-digit',
-//   hour12: false,
-//   timeZone: 'Asia/Jakarta',
-// };
+const timeOptions: Intl.DateTimeFormatOptions = {
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: false,
+  timeZone: 'Asia/Jakarta',
+};
 
-// const formattedDate = now.toLocaleDateString('id-ID', dateOptions);
-// const formattedTime = now.toLocaleTimeString('id-ID', timeOptions);
+const formattedDate = now.toLocaleDateString('id-ID', dateOptions);
+const formattedTime = now.toLocaleTimeString('id-ID', timeOptions);
 
-// return `${formattedDate} ${formattedTime} WIB`;
-// }
+return `${formattedDate} ${formattedTime} WIB`;
+}
 
 export default client;
