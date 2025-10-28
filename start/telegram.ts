@@ -4,6 +4,10 @@ const token = `${process.env.TELEGRAM_TOKEN}`;
 
 const bot = new TelegramBot(token, {polling: true});
 
+bot.on('connection', () => {
+  console.log('Telegram bot connected');
+});
+
 
 // bot.onText(/\/echo (.+)/, (msg, match) => {
 //   const chatId = msg.chat.id;
