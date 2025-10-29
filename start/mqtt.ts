@@ -23,6 +23,7 @@ client.on('connect', async () => {
   const devices = await Device.all();
   devices.forEach((device) => {
     client.subscribeAsync(`${device.name}/status`)
+    console.log(`Subscribed to topic: ${device.name}/status`);
   })
   client.on('message', async (topic, message) => {
     let parsedMessage = JSON.parse(message.toString());
