@@ -23,7 +23,6 @@ client.on('connect', async () => {
   const devices = await Device.all();
   devices.forEach((device) => {
     client.subscribeAsync(`${device.name}/status`)
-    console.log(`Subscribed to topic: ${device.name}/status`);
   })
   client.on('message', async (topic, message) => {
     let parsedMessage = JSON.parse(message.toString());
@@ -39,7 +38,6 @@ client.on('connect', async () => {
         io.emit(`${device.id}/motor_status`, { text: parsedMessage.sensorDatas.find((item: any) => item.flag === 'motor_status').switcher });
         io.emit(`${device.id}/security_status`, { text: parsedMessage.sensorDatas.find((item: any) => item.flag === 'security_status').switcher });
         io.emit(`${device.id}/kwh`, { text: parseInt(parsedMessage.sensorDatas.find((item: any) => item.flag === 'kwh').value) / 100 });
-        console.log(`Emitted data for device ${device.id}`);
         
         const latestStatus = await Rpm.query().where('deviceId', device.id).orderBy('createdAt', 'desc').first();
         const user = await User.findByOrFail('name', "Manual");
