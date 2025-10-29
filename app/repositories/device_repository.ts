@@ -32,9 +32,9 @@ export default class DeviceRepository {
         // if(data.isUsed && data.isUsedBy !== auth.user.id){
         //     throw new Error(`Device is already used by ${data.user.name}`)
         // }
-        // data.isUsed = true;
+        data.isUsed = true;
         data.isUsedBy = auth.user.id;
-        // await data.save();
+        await data.save();
         return data;
     }
     

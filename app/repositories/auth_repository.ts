@@ -24,7 +24,7 @@ export default class AuthRepository {
         await User.accessTokens.delete(user, user.currentAccessToken.identifier);
         const device = await Device.findBy('is_used_by', user.id);
         if(device){
-            device.isUsed = true;
+            device.isUsed = false;
             device.isUsedBy = "";
             device.save();
         }
