@@ -33,7 +33,7 @@ export default class DeviceRepository {
         //     throw new Error(`Device is already used by ${data.user.name}`)
         // }
         data.isUsed = true;
-        // data.isUsedBy = auth.user.id;
+        data.isUsedBy = auth.user.id;
         await data.save();
         return data;
     }
